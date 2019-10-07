@@ -22,9 +22,17 @@ public class Cleardata {
     boolean interger_mode = true;
     int digit = 0;
     int ascii = (int) s.charAt(0) - 48;
-    if(ascii<0 || ascii>9)
+    int i = 0;
+    boolean neg = false;
+    if (ascii == -3)
+    {
+	neg = true;
+	i += 1;
+    }
+    else if(ascii<0 || ascii>9)
         return -1;
-    for(int i=0;i<s.length();i++)
+
+    for(i=i;i<s.length();i++)
     {
         ascii = (int) s.charAt(i) - 48;
         if(0<=ascii && ascii<=9 && interger_mode)
@@ -44,6 +52,8 @@ public class Cleardata {
         }        
             
     }
+    if (neg)
+	number = number * -1;
     return number;
  }
  public static String [] process_string(String s)
@@ -66,9 +76,7 @@ public class Cleardata {
     while(st.hasMoreElements()){
 	    
     	String temp = st.nextToken();
-	if (comma && temp.equals(","))
-	    indexs[index] = 1;
-    	else if (count<=5)
+    	if (count<=5)
             key_value[0] = key_value[0] + temp; 
 	else
 	{	
@@ -79,21 +87,30 @@ public class Cleardata {
                     // x[index] = Double.parseDouble(temp);
             //}
             if (temp.equals("NR"))
+	    {
                 x[index] = 0;
-	    else if (temp.equals(","))
+		index++;
+	    }
+	    else if (temp.contains(",") && comma)
+	    {
+		indexs[index] = 1;
 		++index;
-            else
+	    }
+	    //else if (temp.contains(","))
+		//++index;
+            else if (!temp.contains(","))
 	    {
                     // System.out.println("Token:" + temp);
                     // x[index] = Double.parseDouble(temp);
                 x[index] = checknumber(temp);
                 if(x[index] == -1)
                     indexs[index] = 1;
+		index++;
             }
 	    //if (!temp.equals(","))
             //	++index;
         }
-	if(temp.equals(","))
+	if(temp.contains(","))
 	    comma=true;
 	else
 	    comma=false;
