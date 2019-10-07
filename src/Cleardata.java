@@ -48,7 +48,7 @@ public class Cleardata {
  }
  public static String [] process_string(String s)
  {
-    s = s.replaceAll(",,", ",NaN,");
+    //s = s.replaceAll(",,", ",NaN,");
     double [] x;
     x = new double[24];
     String [] s_x;
@@ -61,22 +61,27 @@ public class Cleardata {
     key_value = new String[2];
     key_value[0] = "";
     key_value[1] = "";
-    StringTokenizer st = new StringTokenizer(s, ",");
+    StringTokenizer st = new StringTokenizer(s, ",", true);
+    boolean comma = true;
     while(st.hasMoreElements()){
 	    
     	String temp = st.nextToken();
-    	if (count<3)
-            key_value[0] = key_value[0] + temp + ","; 
+	if (comma && temp.equals(","))
+	    indexs[index] = 1;
+    	else if (count<=5)
+            key_value[0] = key_value[0] + temp; 
 	else
 	{	
-	    if (temp.equals("NaN"))
-	    {
+	    //if (temp.equals("NaN"))
+	    //{
                     // System.out.println("Token is null");
-                indexs[index] = 1;
+            //    indexs[index] = 1;
                     // x[index] = Double.parseDouble(temp);
-            }
-            else if (temp.equals("NR"))
+            //}
+            if (temp.equals("NR"))
                 x[index] = 0;
+	    else if (temp.equals(","))
+		++index;
             else
 	    {
                     // System.out.println("Token:" + temp);
@@ -85,8 +90,13 @@ public class Cleardata {
                 if(x[index] == -1)
                     indexs[index] = 1;
             }
-            ++index;
+	    //if (!temp.equals(","))
+            //	++index;
         }
+	if(temp.equals(","))
+	    comma=true;
+	else
+	    comma=false;
     	++count;
     }
         // System.out.println(key_value[0]);
